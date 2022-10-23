@@ -43,7 +43,8 @@ namespace SimpelAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [ProducesResponseType(200)]
+        [HttpGet(Name ="GetProduct")]
         [Route("GetProduct")]
         public async Task<IActionResult> GetProduct(int? ID)
         {
