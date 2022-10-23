@@ -16,10 +16,12 @@ namespace SimpelAPI.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IRepository _productRepository;
+        private readonly ILogger<ProductController> _logger;
 
-        public ProductController(IRepository repository)
+        public ProductController(IRepository repository, ILogger<ProductController> logger)
         {
             this._productRepository = repository;
+            this._logger = logger;
         }
 
 
@@ -30,15 +32,13 @@ namespace SimpelAPI.Controllers
             try
             {
                 var ProductItems = await _productRepository.GetAllProductsAsync();
-                if (ProductItems == null)
-                {
-                    return NotFound();
-                }
 
-                return Ok(ProductItems);
+                return ProductItems == null ? NotFound() : Ok(ProductItems);
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest();
             }
         }
